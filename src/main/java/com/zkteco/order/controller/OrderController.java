@@ -19,13 +19,18 @@ import com.zkteco.order.dto.ResultDTO;
 import com.zkteco.order.exception.OrderNotFoundException;
 import com.zkteco.order.service.OrderService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping("api/v1/orders")
+@Api(value = "Order Application",description = "show orders")
 public class OrderController {
 
 	@Autowired
 	private OrderService orderService;
 
+	@ApiOperation(value = "Returns all the Order Resource")
 	@GetMapping
 	public ResultDTO findPaginated(@RequestParam(defaultValue = "0") int pagenumber,
 			@RequestParam(defaultValue = "5") int pagesize) throws OrderNotFoundException {
@@ -35,12 +40,14 @@ public class OrderController {
 	}
 
 	@GetMapping("{id}")
+	@ApiOperation(value = "Returns the Order resource by ID")
 	public ResultDTO fetchOrderById(@PathVariable("id") String orderId) throws OrderNotFoundException {
 		return orderService.fetchOrderById(orderId);
 
 	}
 
 	@PostMapping
+	@ApiOperation(value = "Fetch the Order Application data")
 	public ResultDTO saveOrder(@Valid @RequestBody OrdersDTO orders, BindingResult resut)
 			throws OrderNotFoundException {
 
@@ -48,12 +55,14 @@ public class OrderController {
 	}
 
 	@PutMapping("{id}")
+	@ApiOperation(value = "Update the Order resource by ID")
 	public ResultDTO updateOrder(@PathVariable("id") String orderId, @RequestBody OrdersDTO orders)
 			throws OrderNotFoundException {
 		return orderService.updateOrder(orderId, orders);
 	}
 
 	@DeleteMapping
+	@ApiOperation(value = "Deletes the Order resource by ID")
 	public ResultDTO deleteOrderById(@RequestParam String orderId) throws OrderNotFoundException {
 		return orderService.deleteOrderById(orderId);
 
