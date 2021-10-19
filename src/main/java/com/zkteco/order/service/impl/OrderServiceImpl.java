@@ -28,7 +28,7 @@ public class OrderServiceImpl implements OrderService {
 	private OrderRepository orderRepository;
 	@Autowired
 	private OrderService orderService;
-
+ 
 	public OrdersDTO entityToDto(Orders ord) {
 
 		OrdersDTO dto = new OrdersDTO();
@@ -45,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
 	public List<OrdersDTO> entityToDto(List<Orders> ord) {
 		return ord.stream().map(x -> entityToDto(x)).collect(Collectors.toList());
 	}
-
+ 
 	public Orders dtoToEntity(OrdersDTO dto) {
 		Orders ord = new Orders();
 		ord.setId(dto.getOrderId());
@@ -54,7 +54,7 @@ public class OrderServiceImpl implements OrderService {
 		ord.setOrderCode(dto.getOrderCode());
 		ord.setOrderPrice(dto.getOrderPrice());
 		ord.setOrderQlty(dto.getOrderQlty());
-		ord.setOrderQty(dto.getOrderQty());
+		ord.setOrderQty(dto.getOrderQty()); 
 		return ord;
 	}
 
@@ -62,7 +62,7 @@ public class OrderServiceImpl implements OrderService {
 		return dto.stream().map(x -> dtoToEntity(x)).collect(Collectors.toList());
 	}
 
-	@Override
+	@Override 
 	public ResultDTO getAllOrder(int pagenumber, int pagesize) {
 
 		Pageable page = PageRequest.of(pagenumber, pagesize);
@@ -71,26 +71,31 @@ public class OrderServiceImpl implements OrderService {
 		List<Orders> ord = new ArrayList<Orders>();
 		for (Orders o : pages) {
 			ord.add(o);
-		}
+		} 
 
 		ResultDTO result = new ResultDTO();
 
 		result.setCode("ORD-01");
-		result.setMessage("Order resource updated Successfully");
+		result.setMessage("Order resource returns Successfully");
 		result.setData(ord);
-		return result;
-
-	}
-
-	@Override
+		return result; 
+  
+	} 
+ 
+	@Override 
 	public ResultDTO fetchOrderById(String orderId) throws OrderNotFoundException {
 
 		Optional<Orders> orElse = orderRepository.findById(orderId);
 
 		if (!orElse.isPresent()) {
-			throw new OrderNotFoundException("Orders Not Available");
+			ResultDTO result = new ResultDTO();
+			result.setCode("ODR-01");
+			result.setMessage("Orders Not Available");
+			return result;
+//			throw new OrderNotFoundException("Orders Not Available");
 		}
-
+		else
+		{
 		Orders ord = orElse.get();
 
 		OrdersDTO dto = orderService.entityToDto(ord);
@@ -100,7 +105,7 @@ public class OrderServiceImpl implements OrderService {
 		result.setData(dto);
 
 		return result;
-	}
+	}}
 
 	@Override
 	public ResultDTO saveOrder(OrdersDTO dto, BindingResult bindingResult) throws OrderNotFoundException {
@@ -123,7 +128,7 @@ public class OrderServiceImpl implements OrderService {
 		result.setData(orddto);
 		return result;
 	}
-
+ 
 	@Override
 	public ResultDTO updateOrder(String orderId, OrdersDTO orders) throws OrderNotFoundException {
 

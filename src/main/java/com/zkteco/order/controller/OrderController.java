@@ -24,14 +24,14 @@ import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("api/v1/orders")
-@Api(value = "Order Application",description = "show orders")
+@Api(value = "Order Application", description = "show orders")
 public class OrderController {
 
 	@Autowired
 	private OrderService orderService;
 
-	@ApiOperation(value = "Returns all the Order Resource")
 	@GetMapping
+	@ApiOperation(value = "Returns all the Order Resource")
 	public ResultDTO findPaginated(@RequestParam(defaultValue = "0") int pagenumber,
 			@RequestParam(defaultValue = "5") int pagesize) throws OrderNotFoundException {
 		ResultDTO result = orderService.getAllOrder(pagenumber, pagesize);
