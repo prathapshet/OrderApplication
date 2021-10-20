@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SuccessCount {
 
-	private int successCount;
+	private int succCount;
 	private Object success;
 }

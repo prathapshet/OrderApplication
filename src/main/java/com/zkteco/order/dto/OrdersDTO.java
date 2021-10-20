@@ -2,6 +2,7 @@ package com.zkteco.order.dto;
 
 import java.util.Date;
 
+
 import javax.persistence.Column;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -12,7 +13,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
+@NoArgsConstructor 
 @AllArgsConstructor
 public class OrdersDTO {
 
@@ -37,7 +38,7 @@ public class OrdersDTO {
 	private String orderPrice;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "Created_Date")
+	@Column(name = "Created_Date") 
 	private Date createdDate = new Date();
 
 	@Column(name = "Updated_Date")

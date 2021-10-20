@@ -34,8 +34,7 @@ public class OrderController {
 	@ApiOperation(value = "Returns all the Order Resource")
 	public ResultDTO findPaginated(@RequestParam(defaultValue = "0") int pagenumber,
 			@RequestParam(defaultValue = "5") int pagesize) throws OrderNotFoundException {
-		ResultDTO result = orderService.getAllOrder(pagenumber, pagesize);
-		return result;
+		return orderService.getAllOrder(pagenumber, pagesize);
 
 	}
 
@@ -48,10 +47,9 @@ public class OrderController {
 
 	@PostMapping
 	@ApiOperation(value = "Fetch the Order Application data")
-	public ResultDTO saveOrder(@Valid @RequestBody OrdersDTO orders, BindingResult resut)
-			throws OrderNotFoundException {
+	public ResultDTO saveOrder(@Valid @RequestBody OrdersDTO orders) throws OrderNotFoundException {
 
-		return orderService.saveOrder(orders, resut);
+		return orderService.saveOrder(orders);
 	}
 
 	@PutMapping("{id}")

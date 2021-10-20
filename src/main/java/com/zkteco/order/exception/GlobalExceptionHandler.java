@@ -15,29 +15,20 @@ public class GlobalExceptionHandler {
 
 	// handling specific exception
 	@ExceptionHandler(OrderNotFoundException.class)
-	public ResponseEntity<?> handleOrderNotFoundException(OrderNotFoundException exception, WebRequest request) {
+	public ResponseEntity<ErrorMessage> handleOrderNotFoundException(OrderNotFoundException exception, WebRequest request) {
 
 		ErrorMessage errorMessage = new ErrorMessage(new Date(), HttpStatus.NOT_FOUND, exception.getMessage(), request.getDescription(false));
 
-		return new ResponseEntity(errorMessage, HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
 
-	}
+	} 
 
 	@ExceptionHandler(APIException.class)
-	public ResponseEntity<?> handleAPIException(APIException exception, WebRequest request) {
+	public ResponseEntity<ErrorMessage> handleAPIException(APIException exception, WebRequest request) {
 
 		ErrorMessage errorMessage = new ErrorMessage(new Date(),  HttpStatus.NOT_FOUND, exception.getMessage(), request.getDescription(false));
 
-		return new ResponseEntity(errorMessage, HttpStatus.NOT_FOUND);
-	}
-
-	// handling Global exception
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<?> handleGlobalException(Exception exception, WebRequest request) {
-
-		ErrorMessage errorMessage = new ErrorMessage(new Date(),  HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage(), request.getDescription(false));
-
-		return new ResponseEntity(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
 	}
 
 }

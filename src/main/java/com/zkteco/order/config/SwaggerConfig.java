@@ -22,13 +22,14 @@ public class SwaggerConfig {
 				.apiInfo(metaInfo());
 
 	}
+	
 
 	private ApiInfo metaInfo() {
 
-		ApiInfo apiInfo = new ApiInfo("Order Application", "Spring Boot Project", "1.0", "Terms of Service",
+		return new ApiInfo("Order Application", "Spring Boot Project", "1.0", "Terms of Service",
 				new Contact("Prathap Shet", "https://www.zkteco.in", "prathapshet@zkteco.in"),
 				"Apache Licence Version 2.0", "http://www.apache.org/licence.html");
-		return apiInfo;
+	
 	}
 
 }

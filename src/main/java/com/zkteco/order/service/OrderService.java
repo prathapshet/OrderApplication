@@ -1,8 +1,6 @@
 package com.zkteco.order.service;
 
 import java.util.List;
-import javax.validation.Valid;
-import org.springframework.validation.BindingResult;
 import com.zkteco.order.dto.OrdersDTO;
 import com.zkteco.order.dto.ResultDTO;
 import com.zkteco.order.entity.Orders;
@@ -18,15 +16,15 @@ public interface OrderService {
 
 	public Orders dtoToEntity(OrdersDTO dto);
 
-	public ResultDTO saveOrder(@Valid OrdersDTO orders, BindingResult resut) throws OrderNotFoundException;
-
 	public ResultDTO fetchOrderById(String orderId) throws OrderNotFoundException;
 
 	public ResultDTO deleteOrderById(String orderId) throws OrderNotFoundException;
 
 	public ResultDTO updateOrder(String orderId, OrdersDTO orders) throws OrderNotFoundException;
 
-	public ResultDTO getAllOrder(int pagenumber, int pagesize);
+	public ResultDTO getAllOrder(int pagenumber, int pagesize) throws OrderNotFoundException;
+
+	ResultDTO saveOrder(OrdersDTO dto) throws OrderNotFoundException;
 	
 
 }

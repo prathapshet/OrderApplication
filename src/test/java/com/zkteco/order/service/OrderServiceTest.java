@@ -1,29 +1,17 @@
 package com.zkteco.order.service;
 
 import java.util.ArrayList;
+
 import java.util.List;
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.validation.BindingResult;
-
 import com.zkteco.order.dto.OrdersDTO;
 import com.zkteco.order.dto.ResultDTO;
 import com.zkteco.order.entity.Orders;
 import com.zkteco.order.exception.OrderNotFoundException;
-import com.zkteco.order.repository.OrderRepository;
 
 @SpringBootTest
 class OrderServiceTest {
@@ -31,151 +19,111 @@ class OrderServiceTest {
 	@Autowired
 	private OrderService orderService;
 
-	@MockBean
-	private OrderRepository orderRepository;
-	
-	public List<Orders> ordr;
-
-	Orders ord = new Orders();
-
-	Optional<Orders> order = Optional.of(new Orders());
-	
-	OrdersDTO dto = new OrdersDTO();
-
 	ResultDTO result = new ResultDTO();
 
-    
-	
-	//Pageable page;
+	List<Orders> order = new ArrayList<>();
 
-	@BeforeEach
-	void setUp() throws Exception {
-
-		order = Optional.of(Orders.builder()
-				.id("402894c87c794263017c79440d4a000")
-				.orderName("Bat")
-				.orderAddress("BLR")
-				.orderCode("BT-01")
-				.orderQty("1")
-				.orderQlty("Good")
-				.orderPrice("2500")
-				.build());
-		
-		 Mockito.when(orderRepository.findById("402894c87c794263017c79440d4a000")).
-		  thenReturn(order);
-			
-		 
-		 //save
-			/*
-			 * OrdersDTO dto = new OrdersDTO();
-			 * dto.setOrderId("402894c87c794263017c79440d4a00009"); dto.setOrderName("Pen");
-			 * dto.setOrderAddress("BLR"); dto.setOrderCode("PN-01"); dto.setOrderQty("50");
-			 * dto.setOrderQlty("Good"); dto.setOrderPrice("1000");
-			 */
-		 
-		 OrdersDTO orders = new OrdersDTO();
-		 Orders.builder()
-		       .id("402894c87c794263017c79440d4a000")
-		       .orderName("Mobile")
-		       .orderAddress("BLR")
-		       .orderCode("MB-01")
-		       .orderQty("1")
-		       .orderQlty("Good")
-		       .orderPrice("15000")
-		       .build();
-		 
-		 Mockito.when(orderRepository.save(orders)).thenReturn(ord);
-		 
-	}
+	OrdersDTO dto;
 
 	@Test
-	@DisplayName("Update If Valid Id")
-	public void whenUpdateIfValidId() {
-		
-		String orderId = "402894c87c794263017c79440d4a000";
-		result = orderService.updateOrder(orderId, orders);
-		assertEquals(result.getMessage(), "Order resource updated Successfully");
-		
-	}
-	
-	/*
-	 * @BeforeEach void setUp1() throws Exception {
-	 * 
-	 * ord = Orders.builder() .id("402894c87c794263017c79440d4a00") .orderName("Bt")
-	 * .orderAddress("BLR") .orderCode("BT-01") .orderQty("1") .orderQlty("Good")
-	 * .orderPrice("2500") .build();
-	 * 
-	 * Mockito.when(orderRepository.findAll(page)).thenReturn(pages);
-	 * 
-	 * }
-	 */
- 
-
-
-	//fetchOrderById
-	
-	@Test
-	@Order(1)
 	@DisplayName("Get Data based on Valid Order Id")
-	public void whenValidOrderId_thenOrderShouldFound() throws OrderNotFoundException {
+	void whenValidOrderId_thenOrderShouldFound() throws OrderNotFoundException {
 
-		String orderId = "402894c87c794263017c79440d4a000";
-
-		
-		 
+		String orderId = "402894c87c794263017c79434c5b0000";
 		result = orderService.fetchOrderById(orderId);
-		assertEquals(result.getMessage(), "One Order resource created successfully");
+		assertEquals("One Order resource created successfully", result.getMessage());
 
 	}
 
 	@Test
 	@DisplayName("If Id does not exist")
-	public void whenOrderIdDoesNotExist() throws OrderNotFoundException {
+	void whenOrderIdDoesNotExist() throws OrderNotFoundException {
 
-		String orderId = "402894c87c794263017c79434c5b00340";
-		result = orderService.fetchOrderById(orderId);
+		Exception exception = assertThrows(OrderNotFoundException.class, () -> {
+			orderService.fetchOrderById("402894c87c794263017c79434c5b00340");
+		});
 
-		assertEquals(result.getMessage(), "Orders Not Available");
- 
-	} 
- 
-	
-	
-	
-	
-	
-	
-	
-	//Save order
-	
-	/*
-	 * @Test
-	 * 
-	 * @DisplayName("Save Order Resource") public void saveOrderResource() {
-	 * 
-	 * BindingResult bindingResult; result = orderService.saveOrder(dto, resut);
-	 * assertEquals(result.getMessage(), "Order resource created successfully"); }
-	 */
-	 
-	
-	//pagination
-	
-	
-	/*
-	 * @Test
-	 * 
-	 * @Order(2)
-	 * 
-	 * @DisplayName("Get Order resource by page number and page size")
-	 * 
-	 * public void whenValidPageNumberAndPageSizeGiven() {
-	 * 
-	 * 
-	 * int pagenumber = 0; int pagesize = 5;
-	 * 
-	 * result = orderService.getAllOrder(pagenumber, pagesize);
-	 * assertEquals(result.getMessage(), "Order resource returns Successfully"); }
-	 */
-	
-	
+		String expectedMessage = "Orders Not Available";
+		String actualMessage = exception.getMessage();
+		assertTrue(actualMessage.contains(expectedMessage));
+
+	}
+
+	@Test
+	@DisplayName("Create Order")
+	void testSaveOrders() throws Exception {
+
+		OrdersDTO dto = new OrdersDTO();
+		dto.setOrderId("402894c87c794263017c79434c5b0034009");
+		dto.setOrderName("Mobile");
+		dto.setOrderAddress("BLR");
+		dto.setOrderCode("MB-01");
+
+		dto.setOrderQty("1");
+		dto.setOrderQlty("Good");
+		dto.setOrderPrice("15000");
+
+		result = orderService.saveOrder(dto);
+		assertEquals("Order resource created successfully", result.getMessage());
+
+	}
+
+	@Test
+	@DisplayName("All Orders Resource by page Number and Page Size")
+	void testAllOrdersResource() throws OrderNotFoundException {
+		int pagenumber = 0;
+		int pagesize = 5;
+
+		result = orderService.getAllOrder(pagenumber, pagesize);
+		assertEquals("Order resource returns Successfully", result.getMessage());
+	}
+
+	@Test
+	@DisplayName("Update Orders Resource when given valid Id")
+	void testUpdateOrders() throws OrderNotFoundException {
+
+		OrdersDTO orders = new OrdersDTO();
+		orders.setOrderId("402894c87c794263017c79440d4a0002");
+		orders.setOrderName("Pen");
+		orders.setOrderAddress("BLR");
+		orders.setOrderCode("PNL-01");
+		orders.setOrderQty("10");
+		orders.setOrderQlty("Good");
+		orders.setOrderPrice("50");
+		String orderId = "402894c87c794263017c79440d4a0002";
+		result = orderService.updateOrder(orderId, orders);
+		assertEquals("Order resource updated Successfully", result.getMessage());
+
+	}
+
+	@Test
+	@DisplayName("Update Orders Resource when given Invalid Id")
+	void testOrdersResource_ifIdInvalid() throws OrderNotFoundException {
+		OrdersDTO orders = new OrdersDTO();
+		orders.setOrderId("402894c87c794263017c79434c5b00340098");
+		orders.setOrderName("Pen");
+		orders.setOrderAddress("BLR");
+		orders.setOrderCode("PNL-01");
+		orders.setOrderQty("10");
+		orders.setOrderQlty("Good");
+		orders.setOrderPrice("50");
+		String orderId = "402894c87c794263017c79434c5b00340098";
+
+		Exception exception = assertThrows(OrderNotFoundException.class, () -> {
+			orderService.updateOrder(orderId, orders);
+		});
+
+		String expectedMessage = "Orders Not Available";
+		String actualMessage = exception.getMessage();
+		assertTrue(actualMessage.contains(expectedMessage));
+	}
+
+	@Test
+	@DisplayName("Delete Orders Resource")
+	void testDeleteOrdersResourceById() throws OrderNotFoundException {
+		String orderId = "402894c87c794263017c79434c5b00340098";
+		result = orderService.deleteOrderById(orderId);
+		assertEquals("One or more Orders are not processed", result.getMessage());
+	}
+
 }

@@ -20,3 +20,4 @@ public class ErrorMessage {
 	private String message;
 	private String details;
 }
+
